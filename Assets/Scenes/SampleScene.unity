@@ -353,6 +353,7 @@ GameObject:
   - component: {fileID: 1568345077}
   - component: {fileID: 1568345076}
   - component: {fileID: 1568345075}
+  - component: {fileID: 1568345078}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -372,9 +373,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fb814d7e12d4ea97ae6829a94ada4d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _accelPower: 10
+  _rotationSpeed: 0
   _speed: 0
-  _rotationspeed: 0
-  _transform: {fileID: 0}
+  _speedDecay: 1
+  _brakePower: 5
 --- !u!212 &1568345076
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -442,6 +445,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1568345078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568345074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bc800d8a235b0cfc87dfb4c29426231, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camTransform: {fileID: 519420032}
+  _carTransform: {fileID: 1568345077}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
