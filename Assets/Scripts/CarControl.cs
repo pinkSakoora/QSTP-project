@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class CarControl : MonoBehaviour
@@ -10,6 +11,8 @@ public class CarControl : MonoBehaviour
     [SerializeField] float _speedDecay;
     [SerializeField] float _brakePower;
     float _accelMult;
+    bool _isBoosting;
+    float _boostMult = 1;
 
     const float TOP_SPEED = 2;
     const float GEAR1_TOP = TOP_SPEED * 0.1f;
@@ -52,35 +55,47 @@ public class CarControl : MonoBehaviour
 
     void HandleInput()
     {
+        if (!_isBoosting && Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _isBoosting = true;
+            StartCoroutine(Boost());
+        }
         _xInput = Input.GetAxis("Horizontal");
         _yInput = Input.GetAxis("Vertical");
     }
 
     void Acceleration()
     {
-        if (_speed > TOP_SPEED)
-        {
-            _speed = TOP_SPEED;
-        }
+        _speed = Mathf.Clamp(_speed, 0, TOP_SPEED * _boostMult);
         if (_yInput > 0.01f)
+        {
+            _speed += _accelPower * _accelMult * _yInput * _boostMult;
+        }
+        else if (_yInput == 0 && _speed > 0)
+        {
+            _speed -= _speedDecay;
+        }
+        else if (_yInput < 0)
+        {
+            if (_speed > 0)
             {
-                _speed += _accelPower * _accelMult * _yInput;
+                _speed -= _brakePower;
             }
-            else if (_yInput == 0 && _speed > 0)
+            if (_speed < 0)
             {
-                _speed -= _speedDecay;
+                _speed = 0;
             }
-            else if (_yInput < 0)
-            {
-                if (_speed > 0)
-                {
-                    _speed -= _brakePower;
-                }
-                if (_speed < 0)
-                {
-                    _speed = 0;
-                }
-            }
+        }
+    }
+
+    IEnumerator Boost()
+    {
+        _boostMult = 1.3f;
+        yield return new WaitForSeconds(5f);
+        _boostMult = 1;
+        yield return new WaitForSeconds(10f);
+        _isBoosting = false;
+        yield return null;
     }
 
     void Gear()
